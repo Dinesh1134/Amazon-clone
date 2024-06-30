@@ -1,4 +1,5 @@
-
+import {cart} from '../data/cart.js'
+import {products} from '../data/products.js'
 let productHtml = ''
 
 products.forEach((product) => {
@@ -83,6 +84,12 @@ document.querySelectorAll('.js-add-to-cart')
                 quantity: quantityValue
               })
         }
+
+          let cartQuantity = 0
+          cart.forEach((item) => {
+              cartQuantity += item.quantity
+          })
+          document.querySelector('.js-cart-quantity').innerHTML = cartQuantity
 
         const messageElement = document.querySelector(`.js-added-to-cart${productId}`)
         messageElement.classList.add('added-message')
