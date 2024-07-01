@@ -5,8 +5,9 @@ import {removeFromCart} from '../data/cart.js'
 import dayjs from 'https://unpkg.com/dayjs@1.11.10/esm/index.js'
 import { deliveryOptions } from '../data/deliveryOptions.js'
 
+function renderOrderSummary(){
 
-let cartSummaryHTML = '';
+    let cartSummaryHTML = '';
 cart.forEach((cartItem) => {
     const productId = cartItem.productId
      
@@ -166,5 +167,9 @@ document.querySelectorAll('.js-delete-link')
         element.addEventListener('click' , () => {
             const {productId, deliveryOptionId } = element.dataset
             updateDeliveryOption(productId, deliveryOptionId)
+            renderOrderSummary()
         })
       })
+
+}
+renderOrderSummary()
