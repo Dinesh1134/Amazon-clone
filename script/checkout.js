@@ -1,4 +1,4 @@
-import {cart,calculateCartQuantity} from '../data/cart.js'
+import {cart,calculateCartQuantity,updateQuantity} from '../data/cart.js'
 import {products} from '../data/products.js'
 import {formatCurrency} from './utils/money.js'
 import {removeFromCart} from '../data/cart.js'
@@ -33,7 +33,7 @@ cart.forEach((cartItem) => {
         </div>
         <div class="product-quantity">
             <span>
-            Quantity: <span class="quantity-label">${cartItem.quantity}</span>
+            Quantity: <span class="quantity-label js-quantity-label-${matchingProduct.id}">${cartItem.quantity}</span>
             </span>
             <span class="update-quantity-link link-primary js-update-link" data-product-id="${matchingProduct.id}">
             Update
@@ -133,14 +133,23 @@ document.querySelectorAll('.js-delete-link')
     .forEach((link) => {
      link.addEventListener('click', () => {
          const productId = link.dataset.productId
-         const container = document.querySelector(`.js-cart-item-container-${productId}`)
- 
-         container.classList.remove('is-editing-quantity')
-
          const quantityInput = document.querySelector(`.js-quantity-input-${productId}`)
 
-        const quantityValue = Number( quantityInput.value)
-        console.log(quantityValue)
+         const newQuantity = Number(quantityInput.value)
+
+         if(newQuantity < 0 || newQuantity >= 1000 ){
+            alert('Quantity must be at least 0 and less than 1000')
+            return
+         }
+         updateQuantity(productId,newQuantity)
+
+         const container = document.querySelector(`.js-cart-item-container-${productId}`)
+         container.classList.remove('is-editing-quantity')
+
+         const quantityLable = document.querySelector(`.js-quantity-label-${productId}`)
+         quantityLable.innerHTML = newQuantity
+
+         updateCartQuantity()
      })
 
     }) 
