@@ -1,9 +1,10 @@
-import {cart, calculateCartQuantity, removeFromCart, updateQuantity, updateDeliveryOption} from '../../data/cart.js'
-import {getProduct} from '../../data/products.js'
-import {formatCurrency} from '../utils/money.js'
-import dayjs from 'https://unpkg.com/dayjs@1.11.10/esm/index.js'
-import { deliveryOptions, getDeliveryOption } from '../../data/deliveryOptions.js'
-import {renderPaymentSummary} from '../checkout/paymentSummary.js'
+import { cart, calculateCartQuantity, removeFromCart, updateQuantity, updateDeliveryOption } from '../../data/cart.js'
+import { getProduct } from '../../data/products.js'
+import { formatCurrency } from '../utils/money.js'
+
+import { deliveryOptions, getDeliveryOption, calculateDeliveryDate } from '../../data/deliveryOptions.js'
+import { renderPaymentSummary } from '../checkout/paymentSummary.js'
+import { renderCheckoutHeader } from './checkoutHeader.js'
 
  export function renderOrderSummary(){
 
@@ -17,9 +18,7 @@ import {renderPaymentSummary} from '../checkout/paymentSummary.js'
 
     const deliveryOption = getDeliveryOption(deliveryOptionId)
           
-    const today = dayjs()
-    const deliveryDate = today.add(deliveryOption.deliveryDays, 'days')
-    const dateString = deliveryDate.format('dddd, MMMM D');
+    const dateString = calculateDeliveryDate(deliveryOption)
      
     cartSummaryHTML += `
     <div class="cart-item-container js-cart-item-container-${matchingProduct.id}" >
@@ -68,9 +67,7 @@ function deliveryOptionsHTML(matchingProduct,cartItem){
     let html = ''
     deliveryOptions.forEach((deliveryOption) => {
 
-        const today = dayjs()
-        const deliveryDate = today.add(deliveryOption.deliveryDays, 'days')
-        const dateString = deliveryDate.format('dddd, MMMM D')
+        const dateString = calculateDeliveryDate(deliveryOption)
         const priceString = deliveryOption.priceCents === 0 ? 'FREE -': `$${formatCurrency(deliveryOption.priceCents)} -`
 
         const ischecked = deliveryOption.id === cartItem.deliveryOptionId 
@@ -106,6 +103,9 @@ document.querySelectorAll('.js-delete-link')
 
        container.remove()
        updateCartQuantity()
+
+       renderCheckoutHeader()
+       renderOrderSummary()
        renderPaymentSummary()
     })
  })
@@ -149,6 +149,9 @@ document.querySelectorAll('.js-delete-link')
          quantityLable.innerHTML = newQuantity
 
          updateCartQuantity()
+         
+         renderCheckoutHeader()
+         renderOrderSummary()
          renderPaymentSummary()
      })
 
@@ -158,6 +161,7 @@ document.querySelectorAll('.js-delete-link')
         element.addEventListener('click' , () => {
             const {productId, deliveryOptionId } = element.dataset
             updateDeliveryOption(productId, deliveryOptionId)
+
             renderOrderSummary()
             renderPaymentSummary()
         })
