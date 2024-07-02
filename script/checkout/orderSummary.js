@@ -36,7 +36,7 @@ import {renderPaymentSummary} from '../checkout/paymentSummary.js'
             ${matchingProduct.name}
         </div>
         <div class="product-price">
-            $${(formatCurrency(matchingProduct.priceCents))}
+            $${formatCurrency(matchingProduct.priceCents)}
         </div>
         <div class="product-quantity">
             <span>
@@ -71,7 +71,7 @@ function deliveryOptionsHTML(matchingProduct,cartItem){
         const today = dayjs()
         const deliveryDate = today.add(deliveryOption.deliveryDays, 'days')
         const dateString = deliveryDate.format('dddd, MMMM D')
-        const priceString = deliveryOption.priceCents === 0 ? 'FREE -': `$${deliveryOption.priceCents} -`
+        const priceString = deliveryOption.priceCents === 0 ? 'FREE -': `$${formatCurrency(deliveryOption.priceCents)} -`
 
         const ischecked = deliveryOption.id === cartItem.deliveryOptionId 
         html += `
