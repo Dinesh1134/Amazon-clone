@@ -39,6 +39,14 @@ class Product {
   extraInfoHTML(){
     return '';
   }
+
+  getInstructionLink(){
+    return '';
+  }
+  
+  getWarrantyLink(){
+    return '';
+  }
 }
 class Clothing extends Product {
       sizeChartLink;
@@ -55,6 +63,29 @@ class Clothing extends Product {
         </a>
         `;
       }
+}
+
+class Appliance extends Product {
+  instructionsLink;
+  warrantyLink;
+
+  constructor(productDetials){
+    super(productDetials);
+    this.instructionsLink = productDetials.instructionsLink;
+    this.warrantyLink = productDetials.warrantyLink;
+  }
+
+  getInstructionLink(){
+    return `<a href="${this.instructionsLink}">
+      Instructions
+      </a>`
+  }
+  getWarrantyLink(){
+    return `<a href="${this.warrantyLink}">
+      Warranty
+      </a>`
+  }
+
 }
 
 export const products = [
@@ -117,7 +148,10 @@ export const products = [
       "toaster",
       "kitchen",
       "appliances"
-    ]
+    ],
+    type: "appliance",
+    instructionsLink: "images/appliance-instructions.png",
+    warrantyLink: "images/appliance-warranty.png"
   },
   {
     id: "3ebe75dc-64d2-4137-8860-1f5a963e534b",
@@ -719,6 +753,8 @@ export const products = [
 ].map((productDetials) => {
   if(productDetials.type === 'clothing'){
    return new Clothing(productDetials);
+  }if(productDetials.type === 'appliance'){
+    return new Appliance(productDetials)
   }
   return new Product(productDetials);
 });

@@ -1,4 +1,4 @@
-import { cart, calculateCartQuantity, removeFromCart, updateQuantity, updateDeliveryOption } from '../../data/cart.js'
+import { cart } from '../../data/cart.js'
 import { getProduct } from '../../data/products.js'
 import { formatCurrency } from '../utils/money.js'
 
@@ -9,7 +9,7 @@ import { renderCheckoutHeader } from './checkoutHeader.js'
  export function renderOrderSummary(){
 
     let cartSummaryHTML = '';
-    cart.forEach((cartItem) => {
+    cart.cartItems.forEach((cartItem) => {
     const productId = cartItem.productId
      
     const matchingProduct = getProduct(productId);
@@ -97,7 +97,7 @@ document.querySelectorAll('.js-delete-link')
  .forEach((link) => {
     link.addEventListener('click' , ()=>{
        const productId = link.dataset.productId
-       removeFromCart(productId)
+       cart.removeFromCart(productId)
 
        const container = document.querySelector(`.js-cart-item-container-${productId}`)
 
@@ -112,7 +112,7 @@ document.querySelectorAll('.js-delete-link')
 
    function updateCartQuantity(){
 
-    const cartQuantity = calculateCartQuantity()
+    const cartQuantity = cart.calculateCartQuantity()
    document.querySelector('.js-return-to-home-link').innerHTML = `${cartQuantity} items`
    }       
    updateCartQuantity()    
@@ -140,7 +140,7 @@ document.querySelectorAll('.js-delete-link')
             alert('Quantity must be at least 0 and less than 1000')
             return
          }
-         updateQuantity(productId,newQuantity)
+         cart.updateQuantity(productId,newQuantity)
 
          const container = document.querySelector(`.js-cart-item-container-${productId}`)
          container.classList.remove('is-editing-quantity')
@@ -160,7 +160,7 @@ document.querySelectorAll('.js-delete-link')
     .forEach((element) => {
         element.addEventListener('click' , () => {
             const {productId, deliveryOptionId } = element.dataset
-            updateDeliveryOption(productId, deliveryOptionId)
+            cart.updateDeliveryOption(productId, deliveryOptionId)
 
             renderOrderSummary()
             renderPaymentSummary()
