@@ -1,11 +1,11 @@
 // File: js/renderOrders.js
 import { getProduct } from "../data/products.js";
 import { getDeliveryOption, calculateDeliveryDate } from "../data/deliveryOptions.js";
-import { getOrders } from './order.js'; // Path might need adjustment
+import { getOrderDetials } from './order.js'; // Path might need adjustment
 import { cart } from '../data/cart.js' 
 import dayjs from 'https://unpkg.com/dayjs@1.11.10/esm/index.js';
 
-const orders = getOrders();
+const orders = getOrderDetials();
 
 let ordersHTML = '';
 
